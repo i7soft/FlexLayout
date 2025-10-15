@@ -227,7 +227,7 @@ static YGConfigRef globalConfig;
   // the measure function. Since we already know that this is a leaf,
   // this *should* be fine. Forgive me Hack Gods.
   const YGNodeRef node = self.node;
-  if (!YGNodeHasMeasureFunc(node)) {
+  if (!YGNodeHasMeasureFunc(node) && self.numberOfChildren == 0) {
     YGNodeSetMeasureFunc(node, YGMeasureView);
   }
 
