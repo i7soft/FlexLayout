@@ -231,7 +231,9 @@ static YGConfigRef globalConfig;
     YGNodeSetMeasureFunc(node, YGMeasureView);
   }
 
-  YGNodeMarkDirty(node);
+  if (YGNodeHasMeasureFunc(node)) {
+    YGNodeMarkDirty(node);
+  }
 }
 
 - (NSUInteger)numberOfChildren {
