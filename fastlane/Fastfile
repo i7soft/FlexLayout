@@ -15,6 +15,9 @@ platform :ios do
   before_all do
   end
 
+  DEVICE_NAME = 'iPhone 17'
+  DESTINATION = "platform=iOS Simulator,name=#{DEVICE_NAME}"
+
   lane :install do
     bundle_install
 
@@ -39,7 +42,7 @@ platform :ios do
       configuration: 'Release',
       build: true,
       clean: true,
-      destination: 'platform=iOS Simulator,name=iPhone 15,OS=17.2'
+      destination: DESTINATION
     )
 
     # FlexLayoutSample from FlexLayout.xcworkspace
@@ -49,7 +52,7 @@ platform :ios do
       configuration: 'Release',
       build: true,
       # clean: true,
-      destination: 'platform=iOS Simulator,name=iPhone 15,OS=17.2'
+      destination: DESTINATION
     )
 
     # Example SPM (Swift Package Manager)
@@ -59,12 +62,12 @@ platform :ios do
       configuration: 'Release',
       build: true,
       clean: true,
-      destination: 'platform=iOS Simulator,name=iPhone 15,OS=17.2'
+      destination: DESTINATION
     )
   end
 
   lane :tests do
-    scan(scheme: 'FlexLayoutInner', workspace: 'FlexLayout.xcworkspace', device: 'iPhone 15')
+    scan(scheme: 'FlexLayoutInner', workspace: 'FlexLayout.xcworkspace', device: DEVICE_NAME)
   end
 
   lane :doc do
