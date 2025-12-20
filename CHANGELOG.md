@@ -7,6 +7,25 @@
 
 # Change Log
 
+## [2.2.3](https://github.com/layoutBox/FlexLayout/releases/tag/2.2.2)
+
+#### Add support for SPM dynamic linking
+
+This allows users to link FlexLayout as a dynamic framework when needed for their specific use cases.
+
+Added by [heoblitz](https://github.com/heoblitz) in Pull Request [#284](https://github.com/layoutBox/FlexLayout/pull/284)
+
+
+#### Fix error when dynamically removing views
+
+Currently, FlexLayout does not guarantee that the UIView hierarchy state matches the Yoga node structure. This is because nodes are only updated during the layout process by following the UIView hierarchy.
+When a child UIView is dynamically removed and markDirty() is called, it causes an error and terminates the program because it doesn't align with Yoga's logic.
+
+In React Native's case, views that become leaves are fixed and used consistently, but FlexLayout allows any UIView to become a leaf. Therefore, we add defensive code to prevent logical errors.
+
+Added by [heoblitz](https://github.com/heoblitz) in Pull Request [#281](https://github.com/layoutBox/FlexLayout/pull/281)
+
+
 ## [2.2.2](https://github.com/layoutBox/FlexLayout/releases/tag/2.2.2)
 
 #### Support Swift 6
