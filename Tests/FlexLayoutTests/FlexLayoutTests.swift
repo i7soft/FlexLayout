@@ -26,5 +26,18 @@ final class FlexLayoutTests: XCTestCase {
 
         XCTAssertNil(weakView, "Creation of flex should not lead to retain cycle")
     }
+  
+    
+    func testRemoveViewDynamically() {
+        let rootFlexContainer = UIView()
+        rootFlexContainer.flex.addItem(UIView())
+        rootFlexContainer.flex.define { _ in }
+        rootFlexContainer.flex.layout()
+        
+        rootFlexContainer.subviews.forEach { $0.removeFromSuperview() }
+        rootFlexContainer.flex.markDirty()
+        rootFlexContainer.flex.layout()
 
+        XCTAssertTrue(rootFlexContainer.subviews.isEmpty)
+    }
 }
