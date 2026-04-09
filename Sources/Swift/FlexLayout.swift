@@ -12,7 +12,11 @@
 //
 // Created by Luc Dion on 2017-06-19.
 
+#if os(iOS) || os(tvOS)
 import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
 
 #if SWIFT_PACKAGE
 import FlexLayoutYogaKit
@@ -1274,7 +1278,13 @@ public final class Flex {
     @discardableResult
     public func backgroundColor(_ color: UIColor) -> Flex {
         if let host = self.view {
+#if os(iOS) || os(tvOS)
             host.backgroundColor = color
+#elseif os(macOS)
+            host.wantsLayer = true
+            host.layer?.backgroundColor = color.cgColor
+#endif
+
             return self
         } else {
             preconditionFailure("Trying to modify deallocated host view")
@@ -1291,7 +1301,13 @@ public final class Flex {
     @discardableResult
     public func cornerRadius(_ value: CGFloat) -> Flex {
         if let host = self.view {
+#if os(iOS) || os(tvOS)
             host.layer.cornerRadius = value
+#elseif os(macOS)
+            host.wantsLayer = true
+            host.layer?.cornerRadius = value
+#endif
+
             return self
         } else {
             preconditionFailure("Trying to modify deallocated host view")
@@ -1309,8 +1325,15 @@ public final class Flex {
     @discardableResult
     public func border(_ width: CGFloat, _ color: UIColor) -> Flex {
         if let host = self.view {
+#if os(iOS) || os(tvOS)
             host.layer.borderWidth = width
             host.layer.borderColor = color.cgColor
+#elseif os(macOS)
+            host.wantsLayer = true
+            host.layer?.borderWidth = width
+            host.layer?.borderColor = color.cgColor
+#endif
+
             return self
         } else {
             preconditionFailure("Trying to modify deallocated host view")

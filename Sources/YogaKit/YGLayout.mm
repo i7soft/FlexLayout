@@ -188,11 +188,14 @@ static YGConfigRef globalConfig;
     _isIncludedInLayout = YES;
     _isUIView = [view isMemberOfClass:[UIView class]];
 
-    if ([view isKindOfClass:[UILabel class]]) {
-      if (!YGNodeHasBaselineFunc(_node)) {
-        YGNodeSetBaselineFunc(_node, YGMeasureBaselineLabel);
+#if TARGET_OS_IOS || TARGET_OS_TV
+      if ([view isKindOfClass:[UILabel class]]) {
+          if (!YGNodeHasBaselineFunc(_node)) {
+              YGNodeSetBaselineFunc(_node, YGMeasureBaselineLabel);
+          }
       }
-    }
+#endif
+
 
     if ([view isKindOfClass:[UITextView class]]) {
       if (!YGNodeHasBaselineFunc(_node)) {
@@ -367,6 +370,7 @@ YG_EDGE_PROPERTY(gap, Gap, Gap, YGGutterAll)
 
 #pragma mark - Private
 
+#if TARGET_OS_IOS || TARGET_OS_TV
 static float YGMeasureBaselineLabel(
     YGNodeConstRef node,
     const float width,
@@ -375,6 +379,7 @@ static float YGMeasureBaselineLabel(
     UILabel* view = (__bridge UILabel*) YGNodeGetContext(node);
     return view.font.ascender; // height + view.font.ascender for lastBaseline
 }
+#endif
 
 static float YGMeasureBaselineTextView(
     YGNodeConstRef node,
@@ -382,7 +387,13 @@ static float YGMeasureBaselineTextView(
     const float height) {
 
     UITextView* view = (__bridge UITextView*) YGNodeGetContext(node);
+
+#if TARGET_OS_OSX
+    return view.font.ascender;///TODO: 待验证
+#else
     return view.font.ascender + view.contentInset.top + view.textContainerInset.top;
+#endif
+
 }
 
 static float YGMeasureBaselineTextField(
@@ -392,6 +403,9 @@ static float YGMeasureBaselineTextField(
 
     UITextField* view = (__bridge UITextField*) YGNodeGetContext(node);
 
+#if TARGET_OS_OSX
+    return view.font.ascender;///TODO: 待验证
+#else
     switch (view.borderStyle) {
         case UITextBorderStyleNone:
             return view.font.ascender;
@@ -401,6 +415,7 @@ static float YGMeasureBaselineTextField(
         case UITextBorderStyleRoundedRect:
             return view.font.ascender + 7;
     }
+#endif
 }
 
 static YGSize YGMeasureView(
